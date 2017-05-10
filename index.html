@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Hangman</title>
+
+    <!-- reset.css -->
+    <link rel="stylesheet" type="text/css" href="reset.css">
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
+
+    <!-- style.css -->
+    <!-- link rel="stylesheet" type="text/css" href="style.css" -->
+
+</head>
+<body>
+
+    <div id="results"></div>
+    <div id="target"></div>
+<!--=========================================================================== SCRIPT =====================================-->
+    <script type="text/javascript">
+    
+    //Asks javascript to better hightlight errors
+    "use strict"; 
+
+    //========== VARIABLES ==========
+    //Counters
+        //Guess counters
+    var maxTries                = 7;
+    var guessCnt                = 0;
+    var numGuessesLeft          = 0;
+    
+    var alreadyGuessedCnt       = 0;
+
+         //For loop counters
+    var matchLoopCnt            = 0;
+    var alreadyGuessedLoopCnt   = 0;
+    var noMatchCnt              = 0;
+    var matchCnt                = 0;
+
+
+        //Game counters
+    var winCnt                  = 0; 
+    var loseCnt                 = 0;
+
+    //Indexes
+    var randomIdx               = 0;
+    var targetWordDisplayIdx    = 0;
+    var targetWordListIdx       = 0;
+
+    //Variables
+    var html = "";
+    var targetWord;
+    var userGuess;
+
+    //Array variables
+    var targetWordList       = ["ROSES","PETUNIAS","DAISIES","CARNATIONS","TULIPS","SUNFLOWERS","GARDENIAS","ZINNIAS"];  
+    var targetWordDisplay = "";
+    var newTargetWordDisplay = "";
+    var alreadyGuessedList = "";
+
+
+    //Message strings
+    var alreadyGuessedMsg   = "<h2>That letter was already guessed!</h2>";
+    var matchMsg            = "<h2>That guess was correct!</h2>";
+    var noMatchMsg          = "<h2>That guess was incorrect!</h2>";
+    var winMsg              = "<h1>You win!</h1>";
+    var loseMsg             = "<h1>You lose!</h1>";
+
+    //========== LOGIC ==========
+
+    //Display instructions and win count
+    html += "<h1>Press any key to get started</h1>";
+    html += "<h2>Wins so far: " + winCnt + "</h2>";
+    
+
+    //Randomly generate target word
+    targetWordListIdx = Math.floor(Math.random() * maxTries) + 0;
+    targetWord = targetWordList[targetWordListIdx];
+    console.log("Target flower: " + targetWord);
+
+    //Populate initial targetWordDisplay field
+    for (targetWordDisplayIdx = 0; targetWordDisplayIdx < targetWord.length; targetWordDisplayIdx++)
+    {
+        targetWordDisplay += "_";
+        targetWordDisplay += " ";
+    }
+    console.log("here is targetWordDisplay: " + targetWordDisplay);
+   
+    document.getElementById("target").innerHTML =  "<h1>Target flower: " + targetWordDisplay + "</h1>";
+   
+    //Write html to browser page
+    document.querySelector("#results").innerHTML = html;
+
+    //Accept user guess
+    document.onkeyup = function (event)
+    {
+        userGuess = event.key;
+        userGuess = userGuess.toUpperCase();
+        console.log("User guess: " + userGuess);
+
+        guessCnt++;
+        console.log("User guess count: " + guessCnt);
+
+        console.log("Check for match here");
+        if (targetWord.indexOf(userGuess) > -1 )
+        {
+            console.log("match");
+
+            console.log("Just before for loop - targetWordDisplay: " + targetWordDisplay);
+ 
+            for (targetWordDisplayIdx = 0; targetWordDisplayIdx < targetWordDisplay.length; targetWordDisplay++)
+            {
+            for (var i = 0; i < targetWord.length; i++)
+            {
+                if (targetWord.charAt(i) === userGuess)
+                {
+                    newTargetWordDisplay += userGuess;
+                    newTargetWordDisplay += " ";
+                    console.log("newTargetWordDisplay - userGuess: " + newTargetWordDisplay);
+                }
+                else 
+                {
+                    if ((targetWordDisplay.substr(targetWordDisplayIdx,1) === "_")  && (targetWordDisplay.substr(targetWordDisplayIdx,1) !== " "))
+                    {
+                    newTargetWordDisplay += targetWordDisplay.substr(targetWordDisplayIdx, 1);
+                    newTargetWordDisplay += " ";
+                    console.log("newTargetWordDisplay - else: " + newTargetWordDisplay);
+                    }
+                }
+                console.log("newTargetWordDisplay :" + newTargetWordDisplay);
+            } //end for
+            } //end for 
+            targetWordDisplay = "";
+            targetWordDisplay = newTargetWordDisplay;
+            // newTargetWordDisplay = "";
+        }  // end if
+        else
+        {
+            console.log("NO match");
+        }
+        document.getElementById("target").innerHTML =  "<h1>Target flower: " + targetWordDisplay + "</h1>";  
+        
+    }  //END onkeyup
+ 
+    </script>    
+    <!-- javascript -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
+</body>
+</html>
