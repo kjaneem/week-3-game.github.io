@@ -80,6 +80,8 @@
     //Display instructions and win count
     html += "<h1>Press any key to get started</h1>";
     document.getElementById("wins").innerHTML = "<h2>Wins so far: " + winCnt + "</h2>";
+    document.getElementById("guesses-remaining").innerHTML =  "<h2>Guesses remaining: </h2>";
+    document.getElementById("already-guessed").innerHTML = "<h2>Already guessed: <h2>";
     
 
     //Randomly generate target word
@@ -91,7 +93,7 @@
     for (targetWordDisplayIdx = 0; targetWordDisplayIdx < targetWord.length; targetWordDisplayIdx++)
     {
         targetWordDisplay += "_";
-        //targetWordDisplay += " ";
+        targetWordDisplay += " ";
     }
     console.log("here is targetWordDisplay: " + targetWordDisplay);
    
@@ -113,12 +115,13 @@
             console.log("alreadyGuessedList: " + alreadyGuessedList);
         }
 
+       document.getElementById("already-guessed").innerHTML = "<h2>Already guessed: " + alreadyGuessedList + "<h2>";
+
         guessCnt++;
         console.log("User guess count: " + guessCnt);
-        document.getElementById("guesses-remaining").innerHTML =  "<h2>Guesses remaining: " + (targetWord.length - noMatchCnt) + "</h2>";
-
-        document.getElementById("already-guessed").innerHTML = "<h2>Already guessed: " + alreadyGuessedList + "<h2>";
-
+        numGuessesLeft = targetWord.length - noMatchCnt;
+        document.getElementById("guesses-remaining").innerHTML =  "<h2>Guesses remaining: " + numGuessesLeft + "</h2>";
+ 
         if ((noMatchCnt < maxTries) && (matchCnt <= targetWord.length))
         {
 
@@ -148,27 +151,23 @@
             }
             document.getElementById("target").innerHTML =  "<h1>Target flower: " + targetWordDisplay + "</h1>";  
             
-
-            // function replaceAt(string, index, replace) {
-            //     return string.substring(0, index) + replace + string.substring(index + 1);
-            // }
         }
 
         console.log("matchCnt: " + matchCnt + " noMatchCnt: " + noMatchCnt  + " targetWord.length: " + targetWord.length);
 
-        // if (noMatchCnt === maxTries)  
-        // {
-        //     console.log("LOSE - too many tries");
-        //     document.getElementById("win-lose-msg").innerHTML =  "<h2>YOU LOSE! Try again...</h2>";  
-        // }
+        if (numGuessesLeft <= 0)  
+        {
+            console.log("LOSE - too many tries");
+            document.getElementById("win-lose-msg").innerHTML =  "<h2>YOU LOSE! Try again...</h2>";  
+        }
 
-        // if (matchCnt === targetWord.length)
-        // {
-        //     console.log("WIN! - yeeeeehhhhhaaaaaaa");
-        //     winCnt++;
-        //     document.getElementById("wins").innerHTML = "<h2>Wins so far: " + winCnt + "</h2>";
-        //     document.getElementById("win-lose-msg").innerHTML =  "<h2>YOU WIN! Play again...</h2>";  
-        // }
+        if (matchCnt === targetWord.length)
+        {
+            console.log("WIN! - yeeeeehhhhhaaaaaaa");
+            winCnt++;
+            document.getElementById("wins").innerHTML = "<h2>Wins so far: " + winCnt + "</h2>";
+            document.getElementById("win-lose-msg").innerHTML =  "<h2>YOU WIN! Play again...</h2>";  
+        }
 
         function replaceAt(string, index, replace) {
             return string.substring(0, index) + replace + string.substring(index + 1);
