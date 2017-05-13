@@ -21,6 +21,9 @@
 
     <div id="results"></div>
     <div id="target"></div>
+    <div id="guesses-remaining"></div>
+    <div id="wins"></div>
+    <div id="win-lose-msg"</div>
 <!--=========================================================================== SCRIPT =====================================-->
     <script type="text/javascript">
     
@@ -75,7 +78,7 @@
 
     //Display instructions and win count
     html += "<h1>Press any key to get started</h1>";
-    html += "<h2>Wins so far: " + winCnt + "</h2>";
+    document.getElementById("wins").innerHTML = "<h2>Wins so far: " + winCnt + "</h2>";
     
 
     //Randomly generate target word
@@ -87,7 +90,7 @@
     for (targetWordDisplayIdx = 0; targetWordDisplayIdx < targetWord.length; targetWordDisplayIdx++)
     {
         targetWordDisplay += "_";
-        targetWordDisplay += " ";
+        //targetWordDisplay += " ";
     }
     console.log("here is targetWordDisplay: " + targetWordDisplay);
    
@@ -105,45 +108,62 @@
 
         guessCnt++;
         console.log("User guess count: " + guessCnt);
+        document.getElementById("guesses-remaining").innerHTML =  "<h2>Guesses remaining: " + (targetWord.length - noMatchCnt) + "</h2>";
 
-        console.log("Check for match here");
-        if (targetWord.indexOf(userGuess) > -1 )
+        if ((noMatchCnt < maxTries) && (matchCnt <= targetWord.length))
         {
-            console.log("match");
 
-            console.log("Just before for loop - targetWordDisplay: " + targetWordDisplay);
- 
-            for (targetWordDisplayIdx = 0; targetWordDisplayIdx < targetWordDisplay.length; targetWordDisplay++)
+            console.log("Check for match here");
+            if (targetWord.indexOf(userGuess) > -1 )
             {
-            for (var i = 0; i < targetWord.length; i++)
-            {
-                if (targetWord.charAt(i) === userGuess)
+                console.log("match");
+
+                for (targetWordDisplayIdx = 0; targetWordDisplayIdx < targetWord.length; targetWordDisplayIdx++)
                 {
-                    newTargetWordDisplay += userGuess;
-                    newTargetWordDisplay += " ";
-                    console.log("newTargetWordDisplay - userGuess: " + newTargetWordDisplay);
-                }
-                else 
-                {
-                    if ((targetWordDisplay.substr(targetWordDisplayIdx,1) === "_")  && (targetWordDisplay.substr(targetWordDisplayIdx,1) !== " "))
+                    console.log("targetWord.charAt(i): " + targetWord.charAt(targetWordDisplayIdx));
+                    console.log("userGuess: " + userGuess);
+                    if (targetWord.charAt(targetWordDisplayIdx) === userGuess)
                     {
-                    newTargetWordDisplay += targetWordDisplay.substr(targetWordDisplayIdx, 1);
-                    newTargetWordDisplay += " ";
-                    console.log("newTargetWordDisplay - else: " + newTargetWordDisplay);
-                    }
+                        console.log("targetWord.charAt(i):" + targetWord.charAt(targetWordDisplayIdx));
+                        targetWordDisplay = replaceAt(targetWordDisplay, targetWordDisplayIdx, userGuess);
+                        matchCnt++;
+                    } 
+
                 }
-                console.log("newTargetWordDisplay :" + newTargetWordDisplay);
-            } //end for
-            } //end for 
-            targetWordDisplay = "";
-            targetWordDisplay = newTargetWordDisplay;
-            // newTargetWordDisplay = "";
-        }  // end if
-        else
-        {
-            console.log("NO match");
+                console.log("targetWordDisplay: " + targetWordDisplay);
+            }  // end if
+            else
+            {
+                console.log("NO match");
+                noMatchCnt++;
+            }
+            document.getElementById("target").innerHTML =  "<h1>Target flower: " + targetWordDisplay + "</h1>";  
+            
+
+            // function replaceAt(string, index, replace) {
+            //     return string.substring(0, index) + replace + string.substring(index + 1);
+            // }
         }
-        document.getElementById("target").innerHTML =  "<h1>Target flower: " + targetWordDisplay + "</h1>";  
+
+        console.log("matchCnt: " + matchCnt + " noMatchCnt: " + noMatchCnt  + " targetWord.length: " + targetWord.length);
+
+        if (noMatchCnt === maxTries)  
+        {
+            console.log("LOSE - too many tries");
+            document.getElementById("win-lose-msg").innerHTML =  "<h2>YOU LOSE! Try again...</h2>";  
+        }
+
+        if (matchCnt === targetWord.length)
+        {
+            console.log("WIN! - yeeeeehhhhhaaaaaaa");
+            winCnt++;
+            document.getElementById("wins").innerHTML = "<h2>Wins so far: " + winCnt + "</h2>";
+            document.getElementById("win-lose-msg").innerHTML =  "<h2>YOU WIN! Play again...</h2>";  
+        }
+
+        function replaceAt(string, index, replace) {
+            return string.substring(0, index) + replace + string.substring(index + 1);
+        }
         
     }  //END onkeyup
  
