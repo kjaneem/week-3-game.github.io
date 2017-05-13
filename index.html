@@ -8,7 +8,7 @@
     <title>Hangman</title>
 
     <!-- reset.css -->
-    <link rel="stylesheet" type="text/css" href="reset.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
 
     <!-- bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
@@ -22,6 +22,7 @@
     <div id="results"></div>
     <div id="target"></div>
     <div id="guesses-remaining"></div>
+    <div id="already-guessed"></div>
     <div id="wins"></div>
     <div id="win-lose-msg"</div>
 <!--=========================================================================== SCRIPT =====================================-->
@@ -106,9 +107,17 @@
         userGuess = userGuess.toUpperCase();
         console.log("User guess: " + userGuess);
 
+        if (alreadyGuessedList.indexOf(userGuess) < 0)
+        {
+            alreadyGuessedList = alreadyGuessedList.concat(userGuess);
+            console.log("alreadyGuessedList: " + alreadyGuessedList);
+        }
+
         guessCnt++;
         console.log("User guess count: " + guessCnt);
         document.getElementById("guesses-remaining").innerHTML =  "<h2>Guesses remaining: " + (targetWord.length - noMatchCnt) + "</h2>";
+
+        document.getElementById("already-guessed").innerHTML = "<h2>Already guessed: " + alreadyGuessedList + "<h2>";
 
         if ((noMatchCnt < maxTries) && (matchCnt <= targetWord.length))
         {
@@ -147,19 +156,19 @@
 
         console.log("matchCnt: " + matchCnt + " noMatchCnt: " + noMatchCnt  + " targetWord.length: " + targetWord.length);
 
-        if (noMatchCnt === maxTries)  
-        {
-            console.log("LOSE - too many tries");
-            document.getElementById("win-lose-msg").innerHTML =  "<h2>YOU LOSE! Try again...</h2>";  
-        }
+        // if (noMatchCnt === maxTries)  
+        // {
+        //     console.log("LOSE - too many tries");
+        //     document.getElementById("win-lose-msg").innerHTML =  "<h2>YOU LOSE! Try again...</h2>";  
+        // }
 
-        if (matchCnt === targetWord.length)
-        {
-            console.log("WIN! - yeeeeehhhhhaaaaaaa");
-            winCnt++;
-            document.getElementById("wins").innerHTML = "<h2>Wins so far: " + winCnt + "</h2>";
-            document.getElementById("win-lose-msg").innerHTML =  "<h2>YOU WIN! Play again...</h2>";  
-        }
+        // if (matchCnt === targetWord.length)
+        // {
+        //     console.log("WIN! - yeeeeehhhhhaaaaaaa");
+        //     winCnt++;
+        //     document.getElementById("wins").innerHTML = "<h2>Wins so far: " + winCnt + "</h2>";
+        //     document.getElementById("win-lose-msg").innerHTML =  "<h2>YOU WIN! Play again...</h2>";  
+        // }
 
         function replaceAt(string, index, replace) {
             return string.substring(0, index) + replace + string.substring(index + 1);
